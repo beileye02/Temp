@@ -105,26 +105,21 @@ public class LoginActivity extends BaseActivity {
         if (TextUtils.isEmpty(result)) {
             return;
         }
-        try {
-            JSONObject object = new JSONObject(result);
-            int id = object.getInt("id");
-            if (id == 0) { //登录失败
-                String name = object.getString("name");
-                if ("0".equals(name)) { //账号或密码错误
-                    Toast.makeText(LoginActivity.this, getString(R.string.login_failure), Toast.LENGTH_SHORT).show();
-                } else if ("1".equals(name)) { //在其他设备登录
-                    Toast.makeText(LoginActivity.this, getString(R.string.login_failure_other), Toast.LENGTH_SHORT).show();
-                }
-            } else { //登录成功
-                //TODO 可对用户信息加密然后再保存
-                preferenceManager.save(result);
-                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+        //TODO 可对用户信息加密然后再保存
+        preferenceManager.save(result);
+        int id = preferenceManager.getId();
+        if (id == 0) { //登录失败
+            String name = preferenceManager.getName();
+            if ("0".equals(name)) { //账号或密码错误
+                Toast.makeText(LoginActivity.this, getString(R.string.login_failure), Toast.LENGTH_SHORT).show();
+            } else if ("1".equals(name)) { //在其他设备登录
+                Toast.makeText(LoginActivity.this, getString(R.string.login_failure_other), Toast.LENGTH_SHORT).show();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } else { //登录成功
+            Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 

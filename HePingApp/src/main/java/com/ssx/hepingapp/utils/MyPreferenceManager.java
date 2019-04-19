@@ -39,15 +39,7 @@ public class MyPreferenceManager {
         String result = sharedPreferences.getString("user_info", "");
         System.out.println(isLogin);
         if (!"".equals(result)) {
-            System.out.println(result);
-            try {
-                JSONObject object = new JSONObject(result);
-                name = object.getString("name");
-                avatar = object.getString("touxiang");
-                job = object.getString("zhiwu");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            parseResult(result);
         }
     }
 
@@ -84,5 +76,22 @@ public class MyPreferenceManager {
         editor.putBoolean("isLogin", true);
         editor.putString("user_info", result);
         editor.apply();
+        isLogin = true;
+        parseResult(result);
+    }
+
+    private void parseResult(String result) {
+        if (!"".equals(result)) {
+            System.out.println("parse: " + result);
+            try {
+                JSONObject object = new JSONObject(result);
+                id = object.getInt("id");
+                name = object.getString("name");
+                avatar = object.getString("touxiang");
+                job = object.getString("zhiwu");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
