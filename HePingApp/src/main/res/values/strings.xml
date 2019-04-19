@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">和平城管</string>
+    <string name="welcome">欢迎登录</string>
+    <string name="title">和平街道城市精细化管理信息平台</string>
+    <string name="title_home">首页</string>
+    <string name="title_dashboard">工作纪实</string>
+    <string name="title_notifications">个人中心</string>
+    <string name="username">帐号:</string>
+    <string name="password">密码:</string>
+    <string name="login">登  录</string>
+    <string name="input_password">请输入登录密码</string>
+    <string name="input_username">请输入帐号（手机号）</string>
+    <string name="tip_input_username">帐号不能为空</string>
+    <string name="tip_input_password">登录密码不能为空</string>
+    <string name="tip_network_error">网络连接不可用</string>
+    <string name="login_success">登录成功</string>
+    <string name="login_failure">你的帐号或密码有误</string>
+    <string name="login_failure_other">你的帐号或密码有误</string>
+</resources>

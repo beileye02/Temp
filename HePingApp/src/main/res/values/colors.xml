@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#2196F3</color>
+    <color name="colorAccent">#2196F3</color>
+
+    <color name="white">#ffffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="colorLoginBgStart">#81bcde</color>
+    <color name="colorLoginBgCenter">#5284a8</color>
+    <color name="colorLoginBgEnd">#244d73</color>
+    <color name="colorWelcome">#0a3779</color>
+    <color name="colorTop">#2196F3</color>
+</resources>
