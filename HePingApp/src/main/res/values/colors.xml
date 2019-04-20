@@ -6,6 +6,7 @@
 
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
+    <color name="transparent">#00000000</color>
     <color name="colorLoginBgStart">#81bcde</color>
     <color name="colorLoginBgCenter">#5284a8</color>
     <color name="colorLoginBgEnd">#244d73</color>

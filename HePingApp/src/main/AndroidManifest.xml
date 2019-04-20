@@ -32,6 +32,9 @@
         <activity android:name=".activity.MainActivity" />
 
         <activity android:name=".activity.UserActivity" />
+        <activity android:name=".activity.PasswordActivity" />
+        <activity android:name=".activity.PolicyActivity" />
+        <activity android:name=".activity.PolicyDetailActivity" />
 
     </application>
 

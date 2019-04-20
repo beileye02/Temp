@@ -31,7 +31,7 @@
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/record_listView"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animationCache="false"
@@ -41,4 +41,5 @@
         android:scrollbars="none"
         android:scrollingCache="false"
         android:visibility="gone" />
+
 </android.support.constraint.ConstraintLayout>

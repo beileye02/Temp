@@ -1,22 +1,17 @@
-package com.ssx.hepingapp.fragment;
+package com.ssx.hepingapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.ssx.hepingapp.R;
 import com.ssx.hepingapp.adapter.PolicyAdapter;
-import com.ssx.hepingapp.adapter.RecordAdapter;
 import com.ssx.hepingapp.data.PolicyData;
-import com.ssx.hepingapp.data.RecordData;
-import com.ssx.hepingapp.utils.RetrofitClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,29 +24,26 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import rx.Subscriber;
 
-public class RecordFragment extends BaseFragment implements AdapterView.OnItemClickListener {
-    private static final String TAG_RECORD = "record";
+public class PolicyActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+    private static final String TAG_POLICY = "policy";
 
     private ListView listView;
     private RelativeLayout loadingLayout;
-    private List<RecordData> dataList = new ArrayList<RecordData>();
-    private RetrofitClient retrofitClient;
+    private List<PolicyData> dataList = new ArrayList<PolicyData>();
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_record, container, false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_policy);
 
-        listView = view.findViewById(R.id.record_listView);
-        loadingLayout = view.findViewById(R.id.loading_layout);
+        listView = findViewById(R.id.listView);
+        loadingLayout = findViewById(R.id.loading_layout);
         listView.setOnItemClickListener(this);
-        getRecordList();
-        return view;
+        getPolicyList();
     }
 
-    private void getRecordList() {
-        retrofitClient = RetrofitClient.getInstance();
-        retrofitClient.getRecordList(new Subscriber<ResponseBody>() {
+    private void getPolicyList() {
+        retrofitClient.getPolicyList(new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
                 loadingLayout.setVisibility(View.GONE);
@@ -75,7 +67,7 @@ public class RecordFragment extends BaseFragment implements AdapterView.OnItemCl
                 }
 
             }
-        }, TAG_RECORD);
+        }, TAG_POLICY);
     }
 
     private void parseResult(String result) {
@@ -83,18 +75,18 @@ public class RecordFragment extends BaseFragment implements AdapterView.OnItemCl
             JSONArray jsonArray = new JSONArray(result);
             int len = jsonArray.length();
             if (len > 0) {
-                List<RecordData> dataList = new ArrayList<RecordData>();
+                List<PolicyData> dataList = new ArrayList<PolicyData>();
                 for (int i = 0; i < len; i++) {
-                    RecordData recordData = new RecordData();
+                    PolicyData policyData = new PolicyData();
                     JSONObject object = jsonArray.getJSONObject(i);
-                    recordData.setTitle(object.getString("title"));
-                    recordData.setId(object.getInt("id"));
-                    recordData.setAddTime(object.getString("addtime"));
-                    recordData.setUrl(object.getString("img_url"));
-                    dataList.add(recordData);
+                    policyData.setTitle(object.getString("title"));
+                    policyData.setId(object.getInt("id"));
+                    policyData.setAddTime(object.getString("add_time"));
+                    policyData.setUrl(object.getString("img_url"));
+                    dataList.add(policyData);
                 }
                 this.dataList = dataList;
-                RecordAdapter adapter = new RecordAdapter(context, this.dataList);
+                PolicyAdapter adapter = new PolicyAdapter(this, this.dataList);
                 listView.setAdapter(adapter);
             }
         } catch (JSONException e) {
@@ -103,13 +95,16 @@ public class RecordFragment extends BaseFragment implements AdapterView.OnItemCl
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+    protected void onDestroy() {
+        super.onDestroy();
+        retrofitClient.unSubscribe(TAG_POLICY);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        retrofitClient.unSubscribe(TAG_RECORD);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        PolicyData policyData = dataList.get(position);
+        Intent intent = new Intent(this, PolicyDetailActivity.class);
+        intent.putExtra("id", policyData.getId());
+        startActivity(intent);
     }
 }

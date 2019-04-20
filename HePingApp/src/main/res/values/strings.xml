@@ -5,6 +5,10 @@
     <string name="title_home">首页</string>
     <string name="title_dashboard">工作纪实</string>
     <string name="title_notifications">个人中心</string>
+    <string name="clock_in">移动打卡</string>
+    <string name="policy">政策法规</string>
+    <string name="case_record">案件上报</string>
+    <string name="live_video">视频直播</string>
     <string name="username">帐号:</string>
     <string name="password">密码:</string>
     <string name="login">登  录</string>
@@ -15,5 +19,17 @@
     <string name="tip_network_error">网络连接不可用</string>
     <string name="login_success">登录成功</string>
     <string name="login_failure">你的帐号或密码有误</string>
-    <string name="login_failure_other">你的帐号或密码有误</string>
+    <string name="login_failure_other">此用户已在别的设备上登录</string>
+    <string name="logout">退出登录</string>
+    <string name="change_pwd">修改密码</string>
+    <string name="input_old_password">请输入原密码</string>
+    <string name="input_new_password">请输入新密码</string>
+    <string name="input_confirm_password">请确认新密码</string>
+    <string name="tip_input_confirm_password">请输入确认密码</string>
+    <string name="confirm">确认修改</string>
+    <string name="password_inconsistent">两次输入的新密码不一致</string>
+    <string name="password_same">新密码与原始密码相同</string>
+    <string name="msg_change_password_success">您的密码已修改成功，请记住新密码！</string>
+    <string name="msg_change_password_failure">对不起，您输入的旧密码不正确！</string>
+    <string name="loading">加载中&#8230;</string>
 </resources>

@@ -37,7 +37,6 @@ public class MyPreferenceManager {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         isLogin = sharedPreferences.getBoolean("isLogin", false);
         String result = sharedPreferences.getString("user_info", "");
-        System.out.println(isLogin);
         if (!"".equals(result)) {
             parseResult(result);
         }
@@ -77,12 +76,19 @@ public class MyPreferenceManager {
         editor.putString("user_info", result);
         editor.apply();
         isLogin = true;
-        parseResult(result);
+//        parseResult(result);
     }
 
-    private void parseResult(String result) {
+    public void logout() {
+        isLogin = false;
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isLogin", false);
+        editor.putString("user_info", "");
+        editor.apply();
+    }
+
+    public void parseResult(String result) {
         if (!"".equals(result)) {
-            System.out.println("parse: " + result);
             try {
                 JSONObject object = new JSONObject(result);
                 id = object.getInt("id");

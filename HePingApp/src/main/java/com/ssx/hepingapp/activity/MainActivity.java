@@ -1,5 +1,6 @@
 package com.ssx.hepingapp.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -118,5 +119,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     public String getJob() {
         return preferenceManager.getJob();
+    }
+
+    public void logout() {
+        preferenceManager.logout();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }

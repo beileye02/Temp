@@ -102,11 +102,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void parseResult(String result) {
-        if (TextUtils.isEmpty(result)) {
-            return;
-        }
         //TODO 可对用户信息加密然后再保存
-        preferenceManager.save(result);
+        preferenceManager.parseResult(result);
         int id = preferenceManager.getId();
         if (id == 0) { //登录失败
             String name = preferenceManager.getName();
@@ -116,6 +113,7 @@ public class LoginActivity extends BaseActivity {
                 Toast.makeText(LoginActivity.this, getString(R.string.login_failure_other), Toast.LENGTH_SHORT).show();
             }
         } else { //登录成功
+            preferenceManager.save(result);
             Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
