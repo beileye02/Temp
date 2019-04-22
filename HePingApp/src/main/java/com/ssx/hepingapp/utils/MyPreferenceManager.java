@@ -38,7 +38,10 @@ public class MyPreferenceManager {
         isLogin = sharedPreferences.getBoolean("isLogin", false);
         String result = sharedPreferences.getString("user_info", "");
         if (!"".equals(result)) {
-            parseResult(result);
+            result = AESUtils.decrypt(result);
+            if (result != null) {
+                parseResult(result);
+            }
         }
     }
 
@@ -73,7 +76,10 @@ public class MyPreferenceManager {
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isLogin", true);
-        editor.putString("user_info", result);
+        result = AESUtils.encrypt(result);
+        if (result != null) {
+            editor.putString("user_info", result);
+        }
         editor.apply();
         isLogin = true;
 //        parseResult(result);
