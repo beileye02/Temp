@@ -26,6 +26,8 @@ public class RetrofitClient {
     private static final String ACTION_POLICY_DETAIL = "zhengcefaguishow";
     private static final String ACTION_RECORD_LIST = "gongzuojishi";
     private static final String ACTION_RECORD_DETAIL = "gongzuojishishow";
+    private static final String ACTION_CLOCK_IN = "daka";
+    private static final String ACTION_CHANGE_STATUS = "work";
     private static RetrofitClient self;
     private ApiService apiService;
 
@@ -137,6 +139,30 @@ public class RetrofitClient {
 
     public void getRecordDetail(Subscriber<ResponseBody> subscriber, int id, String name) {
         Subscription subscription = apiService.getPolicyDetail(ACTION_RECORD_DETAIL, id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        subscriptionMap.put(name, subscription);
+    }
+
+    /**
+     * 上传位置信息
+     */
+    public void uploadLocationInfo(Subscriber<ResponseBody> subscriber, int userId,
+                                   double longitude, double latitude, String name) {
+        Subscription subscription = apiService.uploadLocationInfo(ACTION_CLOCK_IN, userId, longitude, latitude)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        subscriptionMap.put(name, subscription);
+    }
+
+    /**
+     * 改变上下班的状态
+     */
+    public void changeStatus(Subscriber<ResponseBody> subscriber, int userId, int status,
+                             double longitude, double latitude, String name) {
+        Subscription subscription = apiService.changeStatus(ACTION_CHANGE_STATUS, userId, status, longitude, latitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);

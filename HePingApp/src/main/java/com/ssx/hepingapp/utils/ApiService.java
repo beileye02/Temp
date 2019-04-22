@@ -8,6 +8,7 @@ import rx.Observable;
 public interface ApiService {
 
     String PATH = "tools/chengguan.ashx";
+    String PATH_CLOCK_IN = "tools/chengguan_daka.ashx";
 
     @POST(PATH)
     Observable<ResponseBody> login(@Query("txtUserName") String username,
@@ -35,4 +36,17 @@ public interface ApiService {
 
     @POST(PATH)
     Observable<ResponseBody> getRecordDetail(@Query("action") String action, @Query("id") int id);
+
+    @POST(PATH_CLOCK_IN)
+    Observable<ResponseBody> uploadLocationInfo(@Query("action") String action,
+                                                @Query("name") int userId,
+                                                @Query("xx") double longitude,
+                                                @Query("yy") double latitude);
+
+    @POST(PATH_CLOCK_IN)
+    Observable<ResponseBody> changeStatus(@Query("action") String action,
+                                          @Query("name") int userId,
+                                          @Query("zhuangtai") int status,
+                                          @Query("xx") double longitude,
+                                          @Query("yy") double latitude);
 }
