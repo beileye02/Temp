@@ -12,11 +12,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
 import com.ssx.hepingapp.R;
 import com.ssx.hepingapp.activity.MainActivity;
 import com.ssx.hepingapp.activity.PolicyActivity;
 import com.ssx.hepingapp.adapter.BannerPagerAdapter;
+import com.ssx.hepingapp.utils.LocationService;
 import com.ssx.hepingapp.utils.RetrofitClient;
 
 import org.json.JSONArray;
@@ -37,6 +41,8 @@ import rx.Subscriber;
 public class HomeFragment extends BaseFragment {
     private static final int FIRST_PAGE = 1;
     private static final String TAG_BANNER = "banner";
+    private static final String TAG_LOCATION_INFO = "location";
+    private static final String TAG_WORK_STATUS = "workStatus";
     private RetrofitClient retrofitClient;
     private List<String> list = new ArrayList<String>();
     private ViewPager viewPager;
@@ -47,12 +53,21 @@ public class HomeFragment extends BaseFragment {
     private Timer timer;
     private TimerTask timerTask;
 
+    private LocationService locationService;
+    private double latitude;
+    private double longitude;
+    private boolean flag; //是否已上传位置信息
+    private int status; //上下班的标识，0 下班 1 上班
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         viewPager = view.findViewById(R.id.viewpager);
         gridView = view.findViewById(R.id.grid);
+        locationService = new LocationService(context);
+        locationService.registerListener(bdLocationListener);
+        locationService.start();
         initGridView();
         getBannerList();
         return view;
@@ -81,7 +96,14 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position == 0) {
-
+                    if (status == 0) {
+                        status = 1;
+                        locationService.start();
+                    } else {
+                        status = 0;
+                        locationService.stop();
+                    }
+                    changeStatus(status);
                 } else if (position == 1) {
                     Intent intent = new Intent(context, PolicyActivity.class);
                     startActivity(intent);
@@ -160,6 +182,22 @@ public class HomeFragment extends BaseFragment {
         timer.schedule(timerTask, 3000, 3000);*/
     }
 
+    /**
+     * 定位结果回调，重写onReceiveLocation方法
+     */
+    private BDAbstractLocationListener bdLocationListener = new BDAbstractLocationListener() {
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            latitude = bdLocation.getLatitude(); // 纬度
+            longitude = bdLocation.getLongitude(); // 经度
+            String address = bdLocation.getAddrStr();
+
+            System.out.println(latitude + ", " + longitude);
+            System.out.println(address);
+            uploadLocationInfo(longitude, latitude);
+        }
+    };
+
     private void parseResult(String result) {
         if (TextUtils.isEmpty(result)) {
             return;
@@ -187,10 +225,63 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+    private void uploadLocationInfo(final double longitude, final double latitude) {
+        if (flag) {
+            return;
+        }
+        flag = true;
+        retrofitClient.uploadLocationInfo(new Subscriber<ResponseBody>() {
+            @Override
+            public void onCompleted() {
+                flag = false;
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                flag = false;
+            }
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+            }
+        }, ((MainActivity) context).getId(), longitude, latitude, TAG_LOCATION_INFO);
+    }
+
+    /**
+     * 改变上下班状态
+     */
+    private void changeStatus(final int status) {
+        retrofitClient.changeStatus(new Subscriber<ResponseBody>() {
+            @Override
+            public void onCompleted() {
+                if (HomeFragment.this.status == 1) {
+                    Toast.makeText(context, getString(R.string.start_work), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, getString(R.string.stop_work), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+
+            }
+        }, ((MainActivity) context).getId(), status, longitude, latitude, TAG_WORK_STATUS);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
+        locationService.unregisterListener(bdLocationListener);
+        locationService.stop();
+
         retrofitClient.unSubscribe(TAG_BANNER);
+        retrofitClient.unSubscribe(TAG_LOCATION_INFO);
+        retrofitClient.unSubscribe(TAG_WORK_STATUS);
         if (timerTask != null) {
             timerTask.cancel();
             timerTask = null;

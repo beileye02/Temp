@@ -17,7 +17,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class RetrofitClient {
-    private static final String URL = "http://gx.zhihuidangjian.com/";
+    private static final String URL = "http://hpapp.zhihuidangjian.com";
     private static final String ACTION_LOGIN = "user_login";
     private static final String ACTION_LOGOUT = "go";
     private static final String ACTION_CHANGE_PASSWORD = "pass";

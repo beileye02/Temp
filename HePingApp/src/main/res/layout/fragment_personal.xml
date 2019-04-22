@@ -16,8 +16,8 @@
             android:layout_width="60dp"
             android:layout_height="80dp"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:src="@mipmap/user" />
 
         <TextView
@@ -36,8 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/avatar"
-            android:layout_marginLeft="16dp"
             android:layout_marginBottom="12dp"
+            android:layout_marginLeft="16dp"
             android:layout_toRightOf="@id/avatar"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -45,6 +45,7 @@
 
     <Button
         android:id="@+id/logout_btn"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
@@ -56,6 +57,7 @@
 
     <Button
         android:id="@+id/pwd_btn"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
